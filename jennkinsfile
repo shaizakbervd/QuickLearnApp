@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout code from your version control system
-                git branch: 'main', url: 'https://github.com/shaizakbervd/QuickLearnApp.git'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shaizakbervd/QuickLearnApp.git']])
             }
         }
 
