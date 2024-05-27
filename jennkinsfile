@@ -16,15 +16,16 @@ pipeline {
         stage('Start Docker Container') {
             steps {
                 script {
-                    bat 'docker run -d -p 8081:81 --name ${CONTAINER_NAME} ${DOCKER-IMAGE}'
+                    bat "docker run -d -p 8081:81 --name ${CONTAINER_NAME} ${DOCKER_IMAGE}"
                 }
             }
         }
+    }
 
     post {
         always {
             script {
-                bat 'docker rm -f ${CONTAINER_NAME}'
+                bat "docker rm -f ${CONTAINER_NAME}"
             }
         }
     }
