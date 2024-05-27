@@ -1,49 +1,55 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = 'quicklearn'
+        CONTAINER_NAME = 'dockerapp'
+    }
+
     stages {
         stage('Checkout SCM') {
             steps {
-                git 'https://github.com/shaizakbervd/QuickLearnApp.git'
+                git branch: 'main', credentialsId: 'your-credentials-id', url: 'https://github.com/shaizakbervd/QuickLearnApp.git'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat 'docker build -t quicklearnapp .'
+                    bat 'docker build -t ${DOCKER_IMAGE} .'
                 }
             }
         }
+
         stage('Create Docker Container') {
             steps {
                 script {
-                    bat 'docker create --name quicklearnapp-container quicklearnapp'
+                    bat 'docker create --name ${CONTAINER_NAME} ${DOCKER_IMAGE}'
                 }
             }
         }
+
         stage('Start Docker Container') {
             steps {
                 script {
-                    bat 'docker start quicklearnapp-container'
+                    bat 'docker start ${CONTAINER_NAME}'
                 }
             }
         }
+
         stage('Stop Docker Container') {
             steps {
                 script {
-                    bat 'docker stop quicklearnapp-container'
+                    bat 'docker stop ${CONTAINER_NAME}'
                 }
             }
         }
     }
+
     post {
         always {
             script {
-                try {
-                    bat 'docker rm quicklearnapp-container'
-                } catch (Exception e) {
-                    echo 'Container does not exist or failed to remove'
-                }
+                bat 'docker rm -f ${CONTAINER_NAME}'
             }
         }
     }
