@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout code from your version control system
-                git 'https://github.com/shaizakbervd/QuickLearnApp.git'
+                git branch: 'main', url: 'https://github.com/shaizakbervd/QuickLearnApp.git'
             }
         }
 
