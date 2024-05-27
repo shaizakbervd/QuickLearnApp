@@ -13,38 +13,13 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    bat 'docker build -t ${DOCKER_IMAGE} .'
-                }
-            }
-        }
-
-        stage('Create Docker Container') {
-            steps {
-                script {
-                    bat 'docker create --name ${CONTAINER_NAME} ${DOCKER_IMAGE}'
-                }
-            }
-        }
-
         stage('Start Docker Container') {
             steps {
                 script {
-                    bat 'docker start ${CONTAINER_NAME}'
+                    bat 'docker run -d -p 8081:81 --name ${CONTAINER_NAME} ${DOCKER-IMAGE}'
                 }
             }
         }
-
-        stage('Stop Docker Container') {
-            steps {
-                script {
-                    bat 'docker stop ${CONTAINER_NAME}'
-                }
-            }
-        }
-    }
 
     post {
         always {
